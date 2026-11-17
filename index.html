@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>حائط الدعاء</title>
+<meta name="description" content="اكتب دعوتك، وأمّن على دعوات غيرك.">
+<meta property="og:title" content="حائط الدعاء">
+<meta property="og:description" content="اكتب دعوتك، وأمّن على دعوات غيرك.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Readex+Pro:wght@300;400;600&family=Reem+Kufi:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --night:#1c1a4a;--night-2:#25225d;--line:#3a3679;--text:#f3f1ff;--soft:#b7b2e6;
+  --amber:#ffb84d;--amber-ink:#2b1700;--rose:#ff8f8f;
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scrollbar-color:var(--amber) var(--night);scrollbar-width:thin}
+::selection{background:var(--amber);color:var(--amber-ink)}
+body{font-family:"Readex Pro",system-ui,sans-serif;background:var(--night);color:var(--text);line-height:1.65;-webkit-tap-highlight-color:transparent;min-height:100vh}
+:focus-visible{outline:2.5px solid var(--amber);outline-offset:3px;border-radius:10px}
+.wrap{max-width:620px;margin:0 auto;padding:0 18px 90px}
+
+header{padding:44px 0 26px;position:relative}
+.stars{position:absolute;inset:0 -40px auto;height:220px;pointer-events:none;opacity:.8}
+h1{font-family:"Reem Kufi";font-size:clamp(2.8rem,12vw,4.4rem);line-height:1;position:relative}
+.sub{color:var(--soft);font-size:1.05rem;margin-top:12px;max-width:34ch;position:relative}
+.stat{margin-top:14px;font-size:.9rem;color:var(--soft);font-variant-numeric:tabular-nums;position:relative}
+.stat b{color:var(--amber);font-weight:600}
+
+.compose{background:var(--night-2);border-radius:22px;padding:16px;box-shadow:0 20px 40px -24px rgba(5,3,30,.8)}
+.compose textarea{
+  width:100%;min-height:96px;resize:vertical;background:transparent;border:0;color:var(--text);
+  font:400 1.3rem/1.85 "Amiri";caret-color:var(--amber);
+}
+.compose textarea:focus{outline:none}
+.compose textarea::placeholder,.compose input::placeholder{color:#8a84c6}
+.row{display:flex;gap:10px;align-items:center;margin-top:10px;border-top:1px solid var(--line);padding-top:12px}
+.row input{flex:1;min-width:0;background:transparent;border:0;color:var(--text);font:400 .95rem "Readex Pro";caret-color:var(--amber)}
+.row input:focus{outline:none}
+.count{font-size:.78rem;color:var(--soft);font-variant-numeric:tabular-nums}
+.count.over{color:var(--rose)}
+.post{
+  font:600 1rem "Readex Pro";color:var(--amber-ink);background:var(--amber);border:0;border-radius:999px;
+  padding:11px 20px;cursor:pointer;white-space:nowrap;transition:transform .3s var(--ease),opacity .2s
+}
+.post:active{transform:scale(.97)}
+.post:disabled{opacity:.45;cursor:not-allowed}
+.msg{font-size:.88rem;margin-top:10px;min-height:1.4em;color:var(--soft)}
+.msg.err{color:var(--rose)}
+
+.tabs{display:flex;gap:6px;margin:34px 0 6px}
+.tab{font:400 .95rem "Readex Pro";color:var(--soft);background:transparent;border:0;padding:8px 14px;border-radius:999px;cursor:pointer}
+.tab[aria-selected="true"]{background:var(--night-2);color:var(--text);font-weight:600}
+
+ol{list-style:none}
+.dua{padding:22px 2px;border-bottom:1px solid var(--line);animation:in .6s var(--ease) both}
+@keyframes in{from{opacity:0;transform:translateY(8px)}}
+.dua p{font-family:"Amiri";font-size:1.35rem;line-height:1.9;white-space:pre-wrap;overflow-wrap:anywhere}
+.meta{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:10px}
+.who{font-size:.85rem;color:var(--soft)}
+.amen{
+  display:inline-flex;align-items:center;gap:8px;font:600 .95rem "Readex Pro";color:var(--text);
+  background:transparent;border:1.5px solid var(--line);border-radius:999px;padding:7px 14px 7px 12px;cursor:pointer;
+  transition:border-color .25s,background .25s,color .25s;font-variant-numeric:tabular-nums
+}
+.amen svg{width:20px;height:20px}
+.amen:hover{border-color:var(--amber)}
+.amen[aria-pressed="true"]{background:var(--amber);border-color:var(--amber);color:var(--amber-ink);cursor:default}
+.amen.pop{animation:pop .5s var(--ease)}
+@keyframes pop{40%{transform:scale(1.12)}}
+.empty,.loading{color:var(--soft);text-align:center;padding:50px 0}
+.more{display:block;margin:24px auto 0;font:400 .95rem "Readex Pro";color:var(--soft);background:transparent;border:1.5px solid var(--line);border-radius:999px;padding:10px 22px;cursor:pointer}
+.more:hover{color:var(--text);border-color:var(--soft)}
+.share{margin-top:44px;text-align:center;color:var(--soft);font-size:.95rem}
+.share button{margin-top:10px}
+.demo{background:#3b2a12;color:#ffd99a;border-radius:14px;padding:10px 14px;font-size:.85rem;margin-top:16px;display:none}
+footer{text-align:center;color:#7e78bd;font-size:.8rem;margin-top:40px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <svg class="stars" viewBox="0 0 700 220" aria-hidden="true">
+      <g fill="#f3f1ff">
+        <circle cx="40" cy="30" r="1.4"/><circle cx="120" cy="80" r="1"/><circle cx="210" cy="24" r="1.8"/><circle cx="300" cy="64" r="1.1"/>
+        <circle cx="390" cy="18" r="1.3"/><circle cx="470" cy="90" r="1"/><circle cx="560" cy="40" r="1.6"/><circle cx="650" cy="76" r="1.2"/>
+        <circle cx="610" cy="150" r="1"/><circle cx="20" cy="130" r="1.1"/><circle cx="340" cy="140" r=".9"/>
+      </g>
+      <path d="M118 40a26 26 0 1 0 22 40 21 21 0 1 1-22-40z" fill="#ffb84d"/>
+    </svg>
+    <h1>حائط الدعاء</h1>
+    <p class="sub">اكتب دعوتك، وأمّن على دعوات غيرك. يمكن دعوة من غريب تكون هي اللي تنقبل.</p>
+    <p class="stat" id="stat"></p>
+    <p class="demo" id="demo">نسخة تجربة: الدعوات هنا تنحفظ في جهازك بس، لين نربط قاعدة البيانات.</p>
+  </header>
+
+  <form class="compose" id="form">
+    <label for="text" class="sr" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">دعوتك</label>
+    <textarea id="text" maxlength="300" placeholder="اكتب دعوتك هنا… مثلاً: يارب اشفِ أبوي"></textarea>
+    <div class="row">
+      <input id="name" maxlength="30" placeholder="اسمك (اختياري)" aria-label="اسمك، اختياري">
+      <span class="count" id="count">٣٠٠</span>
+      <button class="post" id="post" type="submit" disabled>انشر الدعوة</button>
+    </div>
+  </form>
+  <p class="msg" id="msg" role="status"></p>
+
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" aria-selected="true" data-sort="new">الأحدث</button>
+    <button class="tab" role="tab" aria-selected="false" data-sort="top">الأكثر تأميناً</button>
+  </div>
+  <ol id="list"><li class="loading">جاري تحميل الدعوات…</li></ol>
+  <button class="more" id="more" hidden>دعوات أكثر</button>
+
+  <div class="share">
+    كل ما زاد الناس، زادت الآمين.
+    <br><button class="post" id="shareBtn" type="button">انسخ رابط الموقع</button>
+  </div>
+  <footer>لا تكتب معلومات شخصية أو أرقام. الدعوات المسيئة تنحذف.</footer>
+</div>
+
+<script type="module">
+// ===== Firebase config: paste your web app config here =====
+const firebaseConfig = {
+  apiKey: "AIzaSyCItsJ7A-egrSZc40lK_3z1H_Vj_l8xfJ8",
+  authDomain: "ad3eya.firebaseapp.com",
+  projectId: "ad3eya",
+  storageBucket: "ad3eya.firebasestorage.app",
+  messagingSenderId: "1021494775776",
+  appId: "1:1021494775776:web:938c4b98379299073de585"
+};
+
+const $=id=>document.getElementById(id);
+const ar=n=>Number(n).toLocaleString('ar-EG');
+const MAX=300, PAGE=30;
+const handsSVG=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 21v-4.5L4.6 12.4a1.6 1.6 0 0 1 2.6-1.8L9 13V5.5a1.5 1.5 0 0 1 3 0V12"/><path d="M17 21v-4.5l2.4-4.1a1.6 1.6 0 0 0-2.6-1.8L15 13V5.5a1.5 1.5 0 0 0-3 0"/></svg>`;
+
+let mine=new Set();try{mine=new Set(JSON.parse(localStorage.getItem('amened')||'[]'))}catch(e){}
+const saveMine=()=>{try{localStorage.setItem('amened',JSON.stringify([...mine]))}catch(e){}};
+let sort='new',limitN=PAGE,docs=[],api;
+
+// ---------- data layer ----------
+async function firebaseApi(){
+  const {initializeApp}=await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js');
+  const fs=await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js');
+  const db=fs.getFirestore(initializeApp(firebaseConfig));
+  const col=fs.collection(db,'duas');
+  let unsub=null;
+  return {
+    watch(cb){
+      if(unsub)unsub();
+      const q=fs.query(col,fs.orderBy(sort==='top'?'amen':'createdAt','desc'),fs.limit(limitN));
+      unsub=fs.onSnapshot(q,s=>cb(s.docs.map(d=>({id:d.id,...d.data(),createdAt:d.data().createdAt?.toMillis?.()||Date.now()}))),e=>fail(e));
+    },
+    add:(text,name)=>fs.addDoc(col,{text,name,amen:0,createdAt:fs.serverTimestamp()}),
+    amen:id=>fs.updateDoc(fs.doc(db,'duas',id),{amen:fs.increment(1)})
+  };
+}
+function localApi(){
+  $('demo').style.display='block';
+  let store=[];try{store=JSON.parse(localStorage.getItem('demo-duas')||'[]')}catch(e){}
+  if(!store.length)store=[
+    {id:'a',text:'يارب اشفِ كل مريض، وارحم كل من فقدناه',name:'',amen:12,createdAt:Date.now()-3e6},
+    {id:'b',text:'اللهم وفقني في اختبار بكرة وسهّل علي',name:'سارة',amen:5,createdAt:Date.now()-6e5},
+    {id:'c',text:'يارب ارزقني بيت يجمعني أنا وعيالي',name:'أبو محمد',amen:8,createdAt:Date.now()-9e6}];
+  let cbk;const save=()=>{try{localStorage.setItem('demo-duas',JSON.stringify(store))}catch(e){}};
+  const emit=()=>cbk&&cbk([...store].sort((a,b)=>sort==='top'?b.amen-a.amen:b.createdAt-a.createdAt).slice(0,limitN));
+  return{watch(cb){cbk=cb;emit()},async add(text,name){store.push({id:Math.random().toString(36).slice(2),text,name,amen:0,createdAt:Date.now()});save();emit()},async amen(id){const d=store.find(x=>x.id===id);if(d)d.amen++;save();emit()}};
+}
+
+// ---------- render ----------
+function ago(t){
+  const m=Math.max(1,Math.round((Date.now()-t)/6e4));
+  if(m<60)return m===1?'قبل دقيقة':`قبل ${ar(m)} دقيقة`;
+  const h=Math.round(m/60);if(h<24)return h===1?'قبل ساعة':`قبل ${ar(h)} ساعة`;
+  const d=Math.round(h/24);return d===1?'أمس':`قبل ${ar(d)} يوم`;
+}
+function render(){
+  const list=$('list');list.innerHTML='';
+  if(!docs.length){list.innerHTML='<li class="empty">ما فيه دعوات للحين. كن أول واحد يكتب.</li>';}
+  docs.forEach(d=>{
+    const li=document.createElement('li');li.className='dua';
+    const p=document.createElement('p');p.textContent=d.text;
+    const meta=document.createElement('div');meta.className='meta';
+    const who=document.createElement('span');who.className='who';who.textContent=`${d.name||'فاعل خير'} · ${ago(d.createdAt)}`;
+    const b=document.createElement('button');b.className='amen';const done=mine.has(d.id);
+    b.setAttribute('aria-pressed',done);b.innerHTML=`${handsSVG}<span>آمين ${d.amen?ar(d.amen):''}</span>`;
+    b.setAttribute('aria-label',`آمين، ${ar(d.amen||0)} شخص أمّنوا`);
+    b.onclick=async()=>{
+      if(mine.has(d.id))return;mine.add(d.id);saveMine();
+      b.setAttribute('aria-pressed','true');b.classList.add('pop');b.querySelector('span').textContent=`آمين ${ar((d.amen||0)+1)}`;
+      try{await api.amen(d.id)}catch(e){mine.delete(d.id);saveMine();fail(e)}
+    };
+    meta.append(who,b);li.append(p,meta);list.appendChild(li);
+  });
+  $('more').hidden=docs.length<limitN;
+  const total=docs.reduce((a,d)=>a+(d.amen||0),0);
+  $('stat').innerHTML=docs.length?`<b>${ar(docs.length)}</b> دعوة · <b>${ar(total)}</b> آمين`:'';
+}
+function fail(e){console.error(e);const m=$('msg');m.className='msg err';m.textContent='صار خطأ بالاتصال. جرّب مرة ثانية بعد شوي.'}
+
+// ---------- compose ----------
+const text=$('text'),post=$('post'),count=$('count');
+function upd(){const left=MAX-text.value.length;count.textContent=ar(left);count.classList.toggle('over',left<20);post.disabled=text.value.trim().length<3}
+text.addEventListener('input',upd);
+$('form').addEventListener('submit',async e=>{
+  e.preventDefault();const t=text.value.trim().slice(0,MAX),n=$('name').value.trim().slice(0,30);
+  if(t.length<3)return;
+  const last=+localStorage.getItem('lastPost')||0;
+  if(Date.now()-last<60000){$('msg').className='msg err';$('msg').textContent='انتظر دقيقة قبل لا تكتب دعوة ثانية.';return}
+  post.disabled=true;post.textContent='ينشر…';
+  try{await api.add(t,n);try{localStorage.setItem('lastPost',Date.now())}catch(_){}
+    text.value='';upd();$('msg').className='msg';$('msg').textContent='انكتبت دعوتك. الله يتقبّل.';
+    if(sort!=='new')document.querySelector('[data-sort="new"]').click();
+  }catch(err){fail(err)}finally{post.textContent='انشر الدعوة';upd()}
+});
+
+document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{
+  document.querySelectorAll('.tab').forEach(x=>x.setAttribute('aria-selected',x===t));
+  sort=t.dataset.sort;limitN=PAGE;api.watch(d=>{docs=d;render()});
+});
+$('more').onclick=()=>{limitN+=PAGE;api.watch(d=>{docs=d;render()})};
+$('shareBtn').onclick=async e=>{
+  const b=e.currentTarget,url=location.href.split('#')[0];
+  try{await navigator.clipboard.writeText(url);b.textContent='انسخ الرابط ✓'}catch(_){b.textContent=url}
+  setTimeout(()=>b.textContent='انسخ رابط الموقع',2000);
+};
+
+// ---------- boot ----------
+try{api=firebaseConfig?await firebaseApi():localApi()}catch(e){api=localApi()}
+api.watch(d=>{docs=d;render()});
+setInterval(()=>docs.length&&render(),60000);
+</script>
+</body>
+</html>
